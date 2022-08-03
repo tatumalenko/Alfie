@@ -1,13 +1,11 @@
 import com.github.romankh3.image.comparison.ImageComparison
 import com.github.romankh3.image.comparison.ImageComparisonUtil
-import com.github.romankh3.image.comparison.model.ImageComparisonState
 
 object ImageComparator {
-  fun compare() {
-    val expectedImage = ImageComparisonUtil.readImageFromResources("IMG_0572.png")
-    val actualImage = ImageComparisonUtil.readImageFromResources("edited.jpeg")
-    val imageComparisonResult = ImageComparison(expectedImage, actualImage).compareImages()
-    println("State: ${imageComparisonResult.imageComparisonState}")
-    assert(imageComparisonResult.imageComparisonState == ImageComparisonState.MATCH)
+  fun similar(imagePath: String, otherPath: String): Boolean {
+    val image = ImageComparisonUtil.readImageFromResources(imagePath)
+    val other = ImageComparisonUtil.readImageFromResources(otherPath)
+    val comparison = ImageComparison(image, other).compareImages()
+    return comparison.differencePercent < 25
   }
 }

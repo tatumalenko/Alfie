@@ -17,6 +17,8 @@ repositories {
 
 dependencies {
   implementation("com.github.romankh3:image-comparison:4.4.0")
+  implementation("dev.brachtendorf:JImageHash:1.0.0")
+  implementation("org.openjfx:javafx:18.0.1")
   implementation("dev.kord:kord-core:0.8.0-M15")
   implementation("io.ktor:ktor-client-core:2.0.3")
   implementation("io.ktor:ktor-client-cio:2.0.3")
