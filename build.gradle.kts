@@ -16,13 +16,36 @@ repositories {
 }
 
 dependencies {
+  // dependency injection
+  val koinVersion = "3.2.0"
+  implementation("io.insert-koin:koin-core:$koinVersion")
+  // testImplementation("io.insert-koin:koin-test:$koinVersion")
+  // image comparison
   implementation("com.github.romankh3:image-comparison:4.4.0")
+  // JImageHash (requires javafx dependencies and javafx sdk)
   implementation("dev.brachtendorf:JImageHash:1.0.0")
   implementation("org.openjfx:javafx:18.0.1")
+  // discord client
   implementation("dev.kord:kord-core:0.8.0-M15")
-  implementation("io.ktor:ktor-client-core:2.0.3")
-  implementation("io.ktor:ktor-client-cio:2.0.3")
-  implementation("io.ktor:ktor-serialization-kotlinx-json:2.0.3")
+  // http client
+  val ktorVersion = "2.0.3"
+  implementation("io.ktor:ktor-client-core:$ktorVersion")
+  implementation("io.ktor:ktor-client-cio:$ktorVersion")
+  implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+  // aws sdk
+  val awsSdkVersion = "0.17.2-beta"
+  implementation("aws.sdk.kotlin:appconfig:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:appconfigdata:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:s3:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:dynamodb:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:iam:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:cloudwatch:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:sns:$awsSdkVersion")
+  implementation("aws.sdk.kotlin:pinpoint:$awsSdkVersion")
+  // logging
+  implementation("io.github.microutils:kotlin-logging-jvm:2.1.23")
+  implementation("org.slf4j:slf4j-reload4j:1.7.36") // pulls in slf4j-api
+  // kotlin test
   testImplementation(kotlin("test"))
 }
 

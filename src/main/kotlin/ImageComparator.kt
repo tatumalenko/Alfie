@@ -1,11 +1,14 @@
 import com.github.romankh3.image.comparison.ImageComparison
 import com.github.romankh3.image.comparison.ImageComparisonUtil
+import java.awt.image.BufferedImage
 
-object ImageComparator {
+class ImageComparator(
+  private val imageComparisonProvider: (BufferedImage, BufferedImage) -> ImageComparison
+) {
   fun similar(imagePath: String, otherPath: String): Boolean {
     val image = ImageComparisonUtil.readImageFromResources(imagePath)
     val other = ImageComparisonUtil.readImageFromResources(otherPath)
-    val comparison = ImageComparison(image, other).compareImages()
+    val comparison = imageComparisonProvider(image, other).compareImages()
     return comparison.differencePercent < 25
   }
 }

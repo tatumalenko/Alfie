@@ -5,9 +5,14 @@ import dev.kord.core.entity.interaction.GuildChatInputCommandInteraction
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.message.modify.embed
 
-object Define {
-  const val name = "def"
-  private const val param = "term"
+class Define(
+  private val urbanDictionary: UrbanDictionary
+) {
+  companion object {
+    const val name = "def"
+  }
+
+  private val param = "term"
 
   suspend fun init(kord: Kord) {
     kord.createGlobalChatInputCommand(name, "Urban dictionary search") {
@@ -22,7 +27,7 @@ object Define {
     val command = interaction.command
     val term = command.strings[param]!!
     try {
-      val definitions = UrbanDictionary.search(term)
+      val definitions = urbanDictionary.search(term)
       deferred.respond {
         if (definitions.isEmpty()) {
           content = "No results found for '$term'."

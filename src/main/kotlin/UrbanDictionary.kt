@@ -1,25 +1,17 @@
+import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets.UTF_8
-import kotlinx.serialization.Serializable
+import model.urbandictionary.Definition
+import model.urbandictionary.SearchResult
 
-@Serializable
-data class Definition(
-  val definition: String,
-  val permalink: String,
-  val example: String
-)
+class UrbanDictionary(
+  private val httpClient: HttpClient
+) {
+  private val endpoint = "https://api.urbandictionary.com/v0"
 
-@Serializable
-data class SearchResult(
-  val list: List<Definition>
-)
-
-object UrbanDictionary {
-  private const val API_ENDPOINT = "https://api.urbandictionary.com/v0"
-
-  private val url = { term: String -> "$API_ENDPOINT/define?term=${URLEncoder.encode(term, UTF_8)}" }
+  private val url = { term: String -> "$endpoint/define?term=${URLEncoder.encode(term, UTF_8)}" }
 
   suspend fun search(term: String): List<Definition> {
     return httpClient.get(url(term)).body<SearchResult>().list
