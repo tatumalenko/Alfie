@@ -1,3 +1,5 @@
+package lib.dedupe
+
 import com.github.romankh3.image.comparison.ImageComparison
 import com.github.romankh3.image.comparison.ImageComparisonUtil
 import java.awt.image.BufferedImage

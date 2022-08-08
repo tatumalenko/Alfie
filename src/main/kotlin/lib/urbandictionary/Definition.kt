@@ -1,4 +1,4 @@
-package model.urbandictionary
+package lib.urbandictionary
 
 import kotlinx.serialization.Serializable
 

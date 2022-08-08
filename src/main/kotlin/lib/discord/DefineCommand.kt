@@ -1,16 +1,23 @@
+package lib.discord
+
 import dev.kord.common.Color
 import dev.kord.core.Kord
 import dev.kord.core.behavior.interaction.response.respond
 import dev.kord.core.entity.interaction.GuildChatInputCommandInteraction
+import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
+import dev.kord.core.on
 import dev.kord.rest.builder.interaction.string
 import dev.kord.rest.builder.message.modify.embed
+import lib.urbandictionary.UrbanDictionary
+import mu.KotlinLogging
 
-class Define(
+private val log = KotlinLogging.logger {}
+
+class DefineCommand(
   private val urbanDictionary: UrbanDictionary
-) {
-  companion object {
-    const val name = "def"
-  }
+) : Command() {
+
+  override val name = "def"
 
   private val param = "term"
 
@@ -20,9 +27,13 @@ class Define(
         required = true
       }
     }
+
+    kord.on<GuildChatInputCommandInteractionCreateEvent> {
+      runIfNeeded(interaction)
+    }
   }
 
-  suspend fun run(interaction: GuildChatInputCommandInteraction) {
+  override suspend fun run(interaction: GuildChatInputCommandInteraction) {
     val deferred = interaction.deferPublicResponse()
     val command = interaction.command
     val term = command.strings[param]!!
@@ -48,7 +59,7 @@ class Define(
         }
       }
     } catch (exception: Exception) {
-      println(exception)
+      log.error { exception }
     }
   }
 }

@@ -14,15 +14,19 @@ import java.nio.charset.StandardCharsets
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import model.aws.AppConfig
+import lib.aws.AppConfig
+import lib.dedupe.ImageComparator
+import lib.dedupe.ImageHasher
+import lib.discord.DefineCommand
+import lib.discord.PlayPhraseCommand
+import lib.playphrase.PlayPhrase
+import lib.urbandictionary.UrbanDictionary
 import org.koin.core.module.dsl.singleOf
-import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 @Suppress("USELESS_CAST")
 val module = module {
-  single(named("discord-token")) { System.getenv("DISCORD_TOKEN") }
-  single { runBlocking { Kord(get(named("discord-token"))) } }
+  single { runBlocking { Kord(get<AppConfig>().discord.botToken) } }
   single {
     HttpClient(CIO) {
       install(ContentNegotiation) {
@@ -54,8 +58,9 @@ val module = module {
     }
   }
   singleOf(::UrbanDictionary)
-  singleOf(::Define)
+  singleOf(::DefineCommand)
   singleOf(::PlayPhrase)
+  singleOf(::PlayPhraseCommand)
   single { MedianHash(6) as HashingAlgorithm }
   singleOf(::ImageHasher)
   factory { (img0: BufferedImage, img1: BufferedImage) -> ImageComparison(img0, img1) }

@@ -1,8 +1,9 @@
-package model.aws
+package lib.aws
 
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AppConfig(
-  val discord: DiscordConfig
+  val discord: DiscordConfig,
+  val playPhrase: PlayPhraseConfig
 )

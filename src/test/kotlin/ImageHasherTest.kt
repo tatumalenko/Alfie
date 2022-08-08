@@ -1,6 +1,9 @@
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import java.io.File
 import java.net.URI
@@ -8,12 +11,18 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import lib.dedupe.ImageHasher
+import lib.playphrase.SearchResult
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class ImageHasherTest {
   private val httpClient = HttpClient(CIO) {
+    install(ContentEncoding) {
+      deflate(1.0F)
+      gzip(0.9F)
+    }
     install(ContentNegotiation) {
       json(Json {
         prettyPrint = true
@@ -92,5 +101,15 @@ class ImageHasherTest {
         "first: ${it.first}\nsecond: ${it.second}"
       )
     }
+  }
+
+  @Test
+  fun test() = runBlocking {
+    val response =
+      httpClient.get("https://www.playphrase.me/api/v1/phrases/search?q=tatum&limit=10&platform=desktop%20safari&skip=0") {
+        csrfAuth("cmf6ALYjeK3Xxi1Wobc1dIitdPqz+IjROylUqKHePZ+HQCkfROzIedaKmgSWlbgJogBBpd5HpkcmvFLF")
+      }
+    val body = response.body<SearchResult>()
+    println(body)
   }
 }

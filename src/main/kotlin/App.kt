@@ -1,9 +1,8 @@
 import dev.kord.core.Kord
-import dev.kord.core.event.interaction.GuildChatInputCommandInteractionCreateEvent
-import dev.kord.core.on
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
-import io.ktor.client.HttpClient
+import lib.discord.DefineCommand
+import lib.discord.PlayPhraseCommand
 import mu.KotlinLogging
 import org.apache.log4j.BasicConfigurator
 import org.koin.core.component.KoinComponent
@@ -20,36 +19,17 @@ class Main : KoinComponent {
 }
 
 class App(
-  private val httpClient: HttpClient,
   private val kord: Kord,
-  private val define: Define,
-  private val playPhrase: PlayPhrase,
-  private val imageHasher: ImageHasher
+  private val defineCommand: DefineCommand,
+  private val playPhraseCommand: PlayPhraseCommand
 ) {
   suspend fun start() {
     BasicConfigurator.configure()
 
     log.info("Starting App")
 
-    define.init(kord)
-    playPhrase.init(kord)
-
-//    kord.on<MessageCreateEvent> {
-//      log.info("Message intercepted")
-//      message.data.attachments.firstOrNull()?.let {
-//        val payload = httpClient.get(it.url)
-//        val img = ImageIO.read(ByteArrayInputStream(payload.bodyAsChannel().toByteArray()))
-//        val imgHash = imageHasher.hash(img)
-//        // TODO: query DDB to find existing primary key -> if so, img is a dup
-//      }
-//    }
-
-    kord.on<GuildChatInputCommandInteractionCreateEvent> {
-      when (interaction.command.rootName) {
-        Define.name -> define.run(interaction)
-        PlayPhrase.name -> playPhrase.run(interaction)
-      }
-    }
+    defineCommand.init(kord)
+    playPhraseCommand.init(kord)
 
     kord.login {
       @OptIn(PrivilegedIntent::class)

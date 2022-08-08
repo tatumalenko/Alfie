@@ -1,16 +1,20 @@
 import aws.sdk.kotlin.services.appconfigdata.AppConfigDataClient
 import aws.sdk.kotlin.services.appconfigdata.model.GetLatestConfigurationRequest
 import aws.sdk.kotlin.services.appconfigdata.model.StartConfigurationSessionRequest
+import dev.kord.common.entity.ButtonStyle
 import dev.kord.common.entity.Snowflake
 import dev.kord.core.Kord
+import dev.kord.core.behavior.edit
 import dev.kord.core.entity.Message
 import dev.kord.core.entity.channel.TextChannel
+import dev.kord.rest.builder.message.modify.actionRow
 import java.nio.charset.StandardCharsets
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import model.aws.AppConfig
+import lib.aws.AppConfig
 
 suspend fun appConfig(): AppConfig? {
   val appConfigDataClient = AppConfigDataClient { region = "us-east-1" }
@@ -41,6 +45,13 @@ class Util {
   suspend fun uniqs(): Flow<Message> {
     val guild = kord.getGuild(Snowflake(appConfig!!.discord.guildId))
     val channel = guild!!.getChannel(Snowflake(appConfig!!.discord.uniqsChannelId)) as TextChannel
+    channel.messages.first().edit {
+      this.actionRow {
+        this.interactionButton(ButtonStyle.Danger, "blahblah") {
+          this.label = "HEY!"
+        }
+      }
+    }
     return channel.messages
   }
 

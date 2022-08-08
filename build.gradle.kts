@@ -32,6 +32,7 @@ dependencies {
   implementation("io.ktor:ktor-client-core:$ktorVersion")
   implementation("io.ktor:ktor-client-cio:$ktorVersion")
   implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+  implementation("io.ktor:ktor-client-encoding:$ktorVersion")
   // aws sdk
   val awsSdkVersion = "0.17.2-beta"
   implementation("aws.sdk.kotlin:appconfig:$awsSdkVersion")

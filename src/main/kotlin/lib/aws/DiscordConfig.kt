@@ -1,4 +1,4 @@
-package model.aws
+package lib.aws
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

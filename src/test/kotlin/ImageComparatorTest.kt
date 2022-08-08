@@ -1,4 +1,5 @@
 import com.github.romankh3.image.comparison.ImageComparison
+import lib.dedupe.ImageComparator
 import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue

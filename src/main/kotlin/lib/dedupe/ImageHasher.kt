@@ -1,3 +1,5 @@
+package lib.dedupe
+
 import com.github.romankh3.image.comparison.ImageComparisonUtil
 import dev.brachtendorf.jimagehash.hash.Hash
 import dev.brachtendorf.jimagehash.hashAlgorithms.AverageHash
