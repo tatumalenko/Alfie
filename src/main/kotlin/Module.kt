@@ -7,6 +7,7 @@ import dev.brachtendorf.jimagehash.hashAlgorithms.MedianHash
 import dev.kord.core.Kord
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import java.awt.image.BufferedImage
@@ -18,7 +19,11 @@ import lib.aws.AppConfig
 import lib.dedupe.ImageComparator
 import lib.dedupe.ImageHasher
 import lib.discord.DefineCommand
+import lib.discord.InspireCommand
 import lib.discord.PlayPhraseCommand
+import lib.discord.TextToImageCommand
+import lib.inspire.Inspire
+import lib.openai.OpenAI
 import lib.playphrase.PlayPhrase
 import lib.urbandictionary.UrbanDictionary
 import org.koin.core.module.dsl.singleOf
@@ -36,6 +41,7 @@ val module = module {
           ignoreUnknownKeys = true
         })
       }
+      install(HttpTimeout)
     }
   }
   single {
@@ -61,6 +67,10 @@ val module = module {
   singleOf(::DefineCommand)
   singleOf(::PlayPhrase)
   singleOf(::PlayPhraseCommand)
+  singleOf(::Inspire)
+  singleOf(::InspireCommand)
+  single { OpenAI(get(), get<AppConfig>().openAI) }
+  singleOf(::TextToImageCommand)
   single { MedianHash(6) as HashingAlgorithm }
   singleOf(::ImageHasher)
   factory { (img0: BufferedImage, img1: BufferedImage) -> ImageComparison(img0, img1) }

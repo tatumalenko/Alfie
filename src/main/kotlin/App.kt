@@ -2,7 +2,9 @@ import dev.kord.core.Kord
 import dev.kord.gateway.Intent
 import dev.kord.gateway.PrivilegedIntent
 import lib.discord.DefineCommand
+import lib.discord.InspireCommand
 import lib.discord.PlayPhraseCommand
+import lib.discord.TextToImageCommand
 import mu.KotlinLogging
 import org.apache.log4j.BasicConfigurator
 import org.koin.core.component.KoinComponent
@@ -21,7 +23,9 @@ class Main : KoinComponent {
 class App(
   private val kord: Kord,
   private val defineCommand: DefineCommand,
-  private val playPhraseCommand: PlayPhraseCommand
+  private val playPhraseCommand: PlayPhraseCommand,
+  private val inspireCommand: InspireCommand,
+  private val textToImageCommand: TextToImageCommand
 ) {
   suspend fun start() {
     BasicConfigurator.configure()
@@ -30,6 +34,8 @@ class App(
 
     defineCommand.init(kord)
     playPhraseCommand.init(kord)
+    inspireCommand.init(kord)
+    textToImageCommand.init(kord)
 
     kord.login {
       @OptIn(PrivilegedIntent::class)
